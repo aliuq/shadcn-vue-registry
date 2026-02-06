@@ -1,0 +1,5 @@
+[shell_alias]
+m = "mise"
+sk = "bunx skills"
+ska = "bunx skills add"
+skf = "bunx skills find"

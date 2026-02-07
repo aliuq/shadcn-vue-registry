@@ -9,30 +9,51 @@ catalogs:
     '@antfu/eslint-config':
       specifier: ^7.3.0
       version: 7.3.0
+    '@tanstack/vue-table':
+      specifier: 8.21.3
+      version: 8.21.3
+    '@vee-validate/zod':
+      specifier: 4.15.1
+      version: 4.15.1
     '@vueuse/core':
-      specifier: ^14.1.0
+      specifier: 14.1.0
       version: 14.1.0
+    embla-carousel-vue:
+      specifier: 8.6.0
+      version: 8.6.0
     lucide-vue-next:
       specifier: ^0.555.0
       version: 0.555.0
     markdownlint-cli:
       specifier: ^0.47.0
       version: 0.47.0
+    reka-ui:
+      specifier: 2.7.0
+      version: 2.7.0
     tailwindcss:
       specifier: ^4.1.17
       version: 4.1.17
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
+    vaul-vue:
+      specifier: 0.4.1
+      version: 0.4.1
+    vee-validate:
+      specifier: 4.15.1
+      version: 4.15.1
     vue:
       specifier: ^3.5.25
       version: 3.5.25
+    vue-input-otp:
+      specifier: 0.3.2
+      version: 0.3.2
     vue-sonner:
-      specifier: ^2.0.9
+      specifier: 2.0.9
       version: 2.0.9
     zod:
-      specifier: ^4.1.13
-      version: 4.1.13
+      specifier: ^3.25.76
+      version: 3.25.76
 
 overrides:
   semver: 7.7.3
@@ -152,13 +173,13 @@ importers:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.24.3
-        version: 1.24.3(zod@4.1.13)
+        version: 1.24.3(zod@4.3.6)
       shadcn-vue:
         specifier: ^2.4.1
         version: 2.4.1(babel-plugin-macros@3.1.0)(eslint@9.39.1(jiti@2.6.1))(magicast@0.5.1)(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
       zod:
-        specifier: 'catalog:'
-        version: 4.1.13
+        specifier: ^4.1.13
+        version: 4.3.6
     devDependencies:
       '@vue/compiler-sfc':
         specifier: ^3.5.25
@@ -179,7 +200,7 @@ importers:
         specifier: ^4.1.17
         version: 4.1.17(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(stylus@0.57.0)(terser@5.44.1)(yaml@2.8.2))
       '@tanstack/vue-table':
-        specifier: ^8.21.3
+        specifier: 'catalog:'
         version: 8.21.3(vue@3.5.25(typescript@5.9.3))
       '@unovis/ts':
         specifier: ^1.6.2
@@ -188,8 +209,8 @@ importers:
         specifier: ^1.6.2
         version: 1.6.2(@unovis/ts@1.6.2)(vue@3.5.25(typescript@5.9.3))
       '@vee-validate/zod':
-        specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.25(typescript@5.9.3))(zod@4.1.13)
+        specifier: 'catalog:'
+        version: 4.15.1(vue@3.5.25(typescript@5.9.3))(zod@3.25.76)
       '@vueuse/core':
         specifier: 'catalog:'
         version: 14.1.0(vue@3.5.25(typescript@5.9.3))
@@ -200,13 +221,13 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       embla-carousel-vue:
-        specifier: ^8.6.0
+        specifier: 'catalog:'
         version: 8.6.0(vue@3.5.25(typescript@5.9.3))
       lucide-vue-next:
         specifier: 'catalog:'
         version: 0.555.0(vue@3.5.25(typescript@5.9.3))
       reka-ui:
-        specifier: ^2.7.0
+        specifier: 'catalog:'
         version: 2.7.0(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
       shadcn-nuxt:
         specifier: 2.4.1
@@ -221,20 +242,23 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       vaul-vue:
-        specifier: ^0.4.1
+        specifier: 'catalog:'
         version: 0.4.1(reka-ui@2.7.0(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))
       vee-validate:
-        specifier: ^4.15.1
+        specifier: 'catalog:'
         version: 4.15.1(vue@3.5.25(typescript@5.9.3))
       vue:
         specifier: 'catalog:'
         version: 3.5.25(typescript@5.9.3)
+      vue-input-otp:
+        specifier: 'catalog:'
+        version: 0.3.2(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
       vue-sonner:
         specifier: 'catalog:'
         version: 2.0.9(@nuxt/kit@4.2.1(magicast@0.5.1))(@nuxt/schema@4.1.2)(nuxt@4.1.2(@parcel/watcher@2.5.1)(@types/node@24.10.1)(@vue/compiler-sfc@3.5.25)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4)(eslint@9.39.1(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.53.3)(stylus@0.57.0)(terser@5.44.1)(typescript@5.9.3)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(stylus@0.57.0)(terser@5.44.1)(yaml@2.8.2))(vue-tsc@3.1.0(typescript@5.9.3))(yaml@2.8.2))
       zod:
         specifier: 'catalog:'
-        version: 4.1.13
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -7181,6 +7205,11 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
+  vue-input-otp@0.3.2:
+    resolution: {integrity: sha512-QMl1842WB6uNAsK4+mZXIskb00TOfahH3AQt8rpRecbtQnOp+oHSUbL/Z3wekfy6pAl+hyN3e1rCUSkCMzbDLQ==}
+    peerDependencies:
+      vue: ^3.2.0
+
   vue-metamorph@3.3.3:
     resolution: {integrity: sha512-NPeDg2/ZL4lDJsC/PjEfFq+Ln3Rr7cX86AQo4bI5V6ziUTZOMY93HyIwKHW37BrIf4YB97llrGtvM+eMhwr1jw==}
     hasBin: true
@@ -7379,8 +7408,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -8391,7 +8420,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@modelcontextprotocol/sdk@1.24.3(zod@4.1.13)':
+  '@modelcontextprotocol/sdk@1.24.3(zod@4.3.6)':
     dependencies:
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
@@ -8405,8 +8434,8 @@ snapshots:
       jose: 6.1.3
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
-      zod: 4.1.13
-      zod-to-json-schema: 3.25.0(zod@4.1.13)
+      zod: 4.3.6
+      zod-to-json-schema: 3.25.0(zod@4.3.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -9851,11 +9880,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vee-validate/zod@4.15.1(vue@3.5.25(typescript@5.9.3))(zod@4.1.13)':
+  '@vee-validate/zod@4.15.1(vue@3.5.25(typescript@5.9.3))(zod@3.25.76)':
     dependencies:
       type-fest: 4.41.0
       vee-validate: 4.15.1(vue@3.5.25(typescript@5.9.3))
-      zod: 4.1.13
+      zod: 3.25.76
     transitivePeerDependencies:
       - vue
 
@@ -15432,6 +15461,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  vue-input-otp@0.3.2(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3)):
+    dependencies:
+      '@vueuse/core': 12.8.2(typescript@5.9.3)
+      reka-ui: 2.7.0(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
+      vue: 3.5.25(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - typescript
+
   vue-metamorph@3.3.3(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
       '@babel/parser': 8.0.0-alpha.12
@@ -15627,12 +15665,12 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
-  zod-to-json-schema@3.25.0(zod@4.1.13):
+  zod-to-json-schema@3.25.0(zod@4.3.6):
     dependencies:
-      zod: 4.1.13
+      zod: 4.3.6
 
   zod@3.25.76: {}
 
-  zod@4.1.13: {}
+  zod@4.3.6: {}
 
   zwitch@2.0.4: {}

@@ -18,6 +18,6 @@ export default antfu(
     },
   },
   {
-    ignores: ['packages/shadcn-vue'],
+    ignores: ['packages/shadcn-vue', 'pnpm-workspace.yaml'],
   },
 )

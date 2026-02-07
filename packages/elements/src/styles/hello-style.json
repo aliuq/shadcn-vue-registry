@@ -1,8 +1,8 @@
 {
   "$schema": "https://shadcn-vue.com/schema/registry-item.json",
-  "name": "ai-elements-style",
+  "name": "hello-style",
   "type": "registry:style",
-  "description": "Default AI Elements style configuration.",
+  "description": "Default hello style configuration.",
   "cssVars": {
     "theme": {
       "font-sans": "Inter, sans-serif"

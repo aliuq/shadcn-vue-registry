@@ -9,13 +9,12 @@ export type RegistryItemType
     | 'registry:component'
     | 'registry:ui'
     | 'registry:hook'
-    | 'registry:composable'
     | 'registry:page'
     | 'registry:file'
     | 'registry:theme'
     | 'registry:style'
-    | 'registry:item'
     | 'registry:example'
+    | 'registry:item'
     | 'registry:internal'
 
 // ─── Target requirement per type ────────────────────────────────────
@@ -70,12 +69,6 @@ export const REGISTRY_TYPE_CONFIGS: Record<string, RegistryTypeConfig> = {
     itemType: 'registry:hook',
     targetRequired: false,
     label: 'hook',
-  },
-  composable: {
-    outputDir: 'composables',
-    itemType: 'registry:composable',
-    targetRequired: false,
-    label: 'composable',
   },
   lib: {
     outputDir: 'lib',

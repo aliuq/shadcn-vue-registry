@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt generate",
-    "dev": "nuxt dev --port 3002",
+    "dev": "nuxt dev --port 3006",
     "generate": "nuxt generate",
     "preview": "wrangler pages dev",
     "deploy": "wrangler pages deploy --project-name ai-elements-vue",

@@ -1,8 +1,8 @@
 {
   "$schema": "https://shadcn-vue.com/schema/registry-item.json",
-  "name": "ai-elements-theme",
+  "name": "hello-theme",
   "type": "registry:theme",
-  "description": "Default AI Elements theme with brand colors.",
+  "description": "Default hello theme with brand colors.",
   "cssVars": {
     "light": {
       "background": "oklch(1 0 0)",

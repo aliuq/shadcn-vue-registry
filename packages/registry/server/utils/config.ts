@@ -8,6 +8,9 @@ export const config = {
   baseName: process.env.NITRO_BASE_NAME || 'specific-base-name',
   homepage: process.env.NITRO_HOMEPAGE || 'https://example.com',
   baseUrl: process.env.NITRO_BASE_URL || 'http://localhost:3000',
+  // Build lifecycle
+  registryTitle: process.env.REGISTRY_TITLE || 'All Elements',
+  registryDescription: process.env.REGISTRY_DESCRIPTION || 'A collection of all elements.',
 } as const
 
 /**

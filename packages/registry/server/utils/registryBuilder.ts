@@ -139,8 +139,15 @@ export async function generateRegistryAssets(ctx: { rootDir: string }) {
   const bundleDevDeps = new Set<string>()
   const bundleRegDeps = new Set<string>()
 
-  // Types that are bundled into all.json (skip examples, pages, files)
-  const bundleTypes = new Set(['registry:component', 'registry:hook', 'registry:composable', 'registry:lib', 'registry:ui', 'registry:file'])
+  // Types that are bundled into all.json (skip examples, style, theme)
+  const bundleTypes = new Set([
+    'registry:component',
+    'registry:lib',
+    'registry:hook',
+    'registry:ui',
+    'registry:page',
+    'registry:file',
+  ])
 
   for (const result of results) {
     const eligible = result.files.filter(f => bundleTypes.has(f.type))
@@ -168,8 +175,8 @@ export async function generateRegistryAssets(ctx: { rootDir: string }) {
       $schema: 'https://shadcn-vue.com/schema/registry-item.json',
       name: 'all',
       type: 'registry:component',
-      title: 'All AI Elements',
-      description: 'Bundle containing all AI-powered components.',
+      title: config.registryTitle,
+      description: config.registryDescription,
       files: bundleFiles,
       dependencies: Array.from(bundleDeps),
       devDependencies: Array.from(bundleDevDeps),

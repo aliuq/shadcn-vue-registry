@@ -1,11 +1,11 @@
 import type { RegistryItem } from 'shadcn-vue/schema'
 import type { AssetFile, CollectorContext, CollectorResult, RegistryTypeConfig } from '../utils/types'
 import { promises as fs } from 'node:fs'
-import { basename, relative } from 'node:path'
+import { relative } from 'node:path'
 import { config } from '../utils/config'
 import { walkFiles } from '../utils/fileScanner'
 import { REGISTRY_TYPE_CONFIGS } from '../utils/types'
-import { BaseCollector, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
+import { BaseCollector, groupFilesByDirectory, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
 
 /**
  * Collects library / utility files (type `registry:lib`).
@@ -59,38 +59,39 @@ export class LibCollector extends BaseCollector {
     const items: RegistryItem[] = []
     const outputs = new Map<string, Record<string, unknown>>()
 
-    for (const f of files) {
-      const fileName = basename(f.path)
-      const name = fileName.replace('.ts', '')
-      const deps = this.analyzeFileDependencies([f], ctx)
+    // Group by top-level directory or standalone file
+    const groupMap = groupFilesByDirectory(files, 'lib/')
+
+    for (const [group, groupFiles] of groupMap) {
+      const deps = this.analyzeFileDependencies(groupFiles, ctx, { currentGroup: group })
 
       const item: RegistryItem = {
-        name,
+        name: group,
         type: 'registry:lib',
-        title: toTitle(name),
-        description: `${toTitle(name)} utility library.`,
-        files: [{
+        title: toTitle(group),
+        description: `${toTitle(group)} utility library.`,
+        files: groupFiles.map(f => ({
           path: f.path,
           type: f.type as 'registry:lib',
           ...(f.target ? { target: f.target } : {}),
-        }],
+        })),
       }
       items.push(item)
 
       const itemJson = {
         $schema: 'https://shadcn-vue.com/schema/registry-item.json',
         ...item,
-        files: [f],
+        files: groupFiles,
         dependencies: deps.dependencies,
         devDependencies: deps.devDependencies,
         registryDependencies: deps.registryDependencies,
       }
 
-      if (validateRegistryItem(itemJson, `lib:${name}`)) {
-        outputs.set(name, itemJson)
+      if (validateRegistryItem(itemJson, `lib:${group}`)) {
+        outputs.set(group, itemJson)
       }
       else {
-        console.error(`Skipping invalid lib: ${name}`)
+        console.error(`Skipping invalid lib: ${group}`)
       }
     }
 

@@ -98,6 +98,101 @@ export interface AnalyzeDependenciesOptions {
   typesDevDepsMap?: Map<string, string[]>
 }
 
+/**
+ * All path prefixes that map to registry-managed items.
+ *
+ * For `@/` alias imports:
+ *   `@/components/ui/<slug>`          → shadcn-vue registry dep (slug only)
+ *   `@/components/${baseName}/<slug>` → internal component dep
+ *   `@/composables/<slug>`            → internal hook dep
+ *   `@/lib/<slug>`                    → internal lib dep
+ *
+ * For `./` and `../` relative imports:
+ *   Resolved against the file's own rewritten path, then matched
+ *   against the same prefix set. Self-references (slug === currentGroup)
+ *   are skipped for all types.
+ */
+function resolveRegistryDep(
+  mod: string,
+  registryDependencies: Set<string>,
+  options?: AnalyzeDependenciesOptions,
+): void {
+  const baseName = config.baseName
+  const baseUrl = config.baseUrl
+
+  // ── @/ alias imports ──────────────────────────────────────────
+
+  // shadcn-vue ui primitives: @/components/ui/<slug>
+  if (mod.startsWith('@/components/ui/')) {
+    const slug = extractRegistrySlug(mod, '@/components/ui/')
+    if (slug)
+      registryDependencies.add(slug)
+    return
+  }
+
+  // Internal AI components: @/components/<baseName>/<slug>
+  const aiComponentPrefix = `@/components/${baseName}/`
+  if (mod.startsWith(aiComponentPrefix)) {
+    const slug = extractRegistrySlug(mod, aiComponentPrefix)
+    if (slug) {
+      if (options?.currentGroup && slug === options.currentGroup)
+        return
+      if (!options?.skipAiComponentDeps)
+        registryDependencies.add(`${baseUrl}/${slug}.json`)
+    }
+    return
+  }
+
+  // Internal composables / hooks: @/composables/<slug>
+  if (mod.startsWith('@/composables/')) {
+    const slug = extractRegistrySlug(mod, '@/composables/')
+    if (slug) {
+      if (options?.currentGroup && slug === options.currentGroup)
+        return
+      if (!options?.skipAiComponentDeps)
+        registryDependencies.add(`${baseUrl}/${slug}.json`)
+    }
+    return
+  }
+
+  // Internal lib utilities: @/lib/<slug>
+  if (mod.startsWith('@/lib/')) {
+    const slug = extractRegistrySlug(mod, '@/lib/')
+    if (slug) {
+      if (options?.currentGroup && slug === options.currentGroup)
+        return
+      if (!options?.skipAiComponentDeps)
+        registryDependencies.add(`${baseUrl}/${slug}.json`)
+    }
+  }
+}
+
+/**
+ * Resolve a relative import (`./` or `../`) against the file's rewritten path
+ * and check whether it refers to another registry-managed group.
+ *
+ * `./sibling` imports ARE resolved (not skipped), because standalone files
+ * in the same directory may be separate registry items.
+ */
+function resolveRelativeImport(
+  mod: string,
+  registryDependencies: Set<string>,
+  options?: AnalyzeDependenciesOptions,
+): void {
+  if (!options?.filePath)
+    return
+
+  const currentDir = dirname(options.filePath)
+  const resolved = join(currentDir, mod).split('\\').join('/')
+
+  // The resolved path is something like:
+  //   "components/<baseName>/other-group/file.ts"
+  //   "composables/otherHook.ts"
+  //   "lib/otherUtil.ts"
+  // Wrap it with "@/" and run through the same alias resolver
+  resolveRegistryDep(`@/${resolved}`, registryDependencies, options)
+}
+
 export function analyzeDependencies(
   imports: string[],
   allowedDeps: Set<string>,
@@ -107,28 +202,24 @@ export function analyzeDependencies(
   const dependencies = new Set<string>()
   const devDependencies = new Set<string>()
   const registryDependencies = new Set<string>()
-  const basePath = `components/${config.baseName}/`
 
   for (const mod of imports) {
-    if (mod.startsWith('./')) {
+    // Relative imports (./ and ../) — resolve against the file's path
+    // to detect cross-item registry dependencies.
+    // A ./sibling import may reference a different registry item
+    // when items are standalone files in the same directory.
+    if (mod.startsWith('./') || mod.startsWith('../')) {
+      resolveRelativeImport(mod, registryDependencies, options)
       continue
     }
 
-    if (mod.startsWith('../') && options?.filePath && options?.currentGroup) {
-      const currentDir = dirname(options.filePath)
-      const resolved = join(currentDir, mod).split('\\').join('/')
-      if (resolved.startsWith(basePath)) {
-        const targetGroup = resolved.slice(basePath.length).split('/').filter(Boolean)[0]
-        if (targetGroup && targetGroup !== options.currentGroup) {
-          if (!options.skipAiComponentDeps) {
-            registryDependencies.add(`${config.baseUrl}/${targetGroup}.json`)
-          }
-        }
-      }
+    // @/ alias imports — check for registry dependencies
+    if (mod.startsWith('@/')) {
+      resolveRegistryDep(mod, registryDependencies, options)
       continue
     }
 
-    // Normalize to base package name for dependency lookup
+    // ── npm package dependency resolution ───────────────────────
     const pkg = getBasePackageName(mod)
 
     if (allowedDeps.has(pkg)) {
@@ -137,33 +228,14 @@ export function analyzeDependencies(
       if (options?.typesDevDepsMap) {
         const typePkgs = options.typesDevDepsMap.get(pkg)
         if (typePkgs) {
-          for (const t of typePkgs) {
+          for (const t of typePkgs)
             devDependencies.add(t)
-          }
         }
       }
     }
 
-    if (allowedDevDeps.has(mod)) {
+    if (allowedDevDeps.has(mod))
       devDependencies.add(mod)
-    }
-
-    if (mod.startsWith('@/components/ui/')) {
-      const slug = extractRegistrySlug(mod, '@/components/ui/')
-      if (slug)
-        registryDependencies.add(slug)
-    }
-
-    if (mod.startsWith(`@/components/${config.baseName}/`)) {
-      const slug = extractRegistrySlug(mod, `@/components/${config.baseName}/`)
-      if (slug) {
-        if (options?.currentGroup && slug === options.currentGroup)
-          continue
-        if (!options?.skipAiComponentDeps) {
-          registryDependencies.add(`${config.baseUrl}/${slug}.json`)
-        }
-      }
-    }
   }
 
   return { dependencies, devDependencies, registryDependencies }

@@ -1,11 +1,11 @@
 import type { RegistryItem } from 'shadcn-vue/schema'
 import type { AssetFile, CollectorContext, CollectorResult, RegistryTypeConfig } from '../utils/types'
 import { promises as fs } from 'node:fs'
-import { basename, relative } from 'node:path'
+import { relative } from 'node:path'
 import { config } from '../utils/config'
 import { walkHookFiles } from '../utils/fileScanner'
 import { REGISTRY_TYPE_CONFIGS } from '../utils/types'
-import { BaseCollector, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
+import { BaseCollector, groupFilesByDirectory, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
 
 /**
  * Collects composable / hook files from `packages/elements/src/composables/`.
@@ -41,40 +41,40 @@ export class HookCollector extends BaseCollector {
     const items: RegistryItem[] = []
     const outputs = new Map<string, Record<string, unknown>>()
 
-    // Group hooks: each top-level hook file or directory becomes one item
-    // For simplicity, each file is its own item
-    for (const f of files) {
-      const fileName = basename(f.path)
-      const name = fileName.replace('.ts', '')
-      const deps = this.analyzeFileDependencies([f], ctx)
+    // Group by top-level directory or standalone file
+    const groupMap = groupFilesByDirectory(files, 'composables/')
+
+    for (const [group, groupFiles] of groupMap) {
+      const deps = this.analyzeFileDependencies(groupFiles, ctx, { currentGroup: group })
+      const specialName = group === 'index' ? 'composables' : group
 
       const item: RegistryItem = {
-        name,
+        name: specialName,
         type: 'registry:hook',
-        title: toTitle(name),
-        description: `${toTitle(name)} composable hook.`,
-        files: [{
+        title: toTitle(group),
+        description: `${toTitle(group)} composable hook.`,
+        files: groupFiles.map(f => ({
           path: f.path,
           type: f.type as 'registry:hook',
           ...(f.target ? { target: f.target } : {}),
-        }],
+        })),
       }
       items.push(item)
 
       const itemJson = {
         $schema: 'https://shadcn-vue.com/schema/registry-item.json',
         ...item,
-        files: [f],
+        files: groupFiles,
         dependencies: deps.dependencies,
         devDependencies: deps.devDependencies,
         registryDependencies: deps.registryDependencies,
       }
 
-      if (validateRegistryItem(itemJson, `hook:${name}`)) {
-        outputs.set(name, itemJson)
+      if (validateRegistryItem(itemJson, `hook:${specialName}`)) {
+        outputs.set(specialName, itemJson)
       }
       else {
-        console.error(`Skipping invalid hook: ${name}`)
+        console.error(`Skipping invalid hook: ${specialName}`)
       }
     }
 

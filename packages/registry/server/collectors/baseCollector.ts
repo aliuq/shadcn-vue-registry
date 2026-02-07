@@ -58,6 +58,43 @@ export function resolveTarget(
   return undefined
 }
 
+/**
+ * Group collected asset files by their top-level path segment.
+ *
+ * Given files with paths like:
+ *   `prefix/foo.ts`          → group "foo" (name = "foo")
+ *   `prefix/bar/a.ts`        → group "bar" (name = "bar")
+ *   `prefix/bar/b.ts`        → group "bar" (name = "bar")
+ *
+ * Returns a map from group-name → files in that group.
+ *
+ * @param files  All collected AssetFile[]
+ * @param prefix The path prefix to strip before determining the group
+ *               (e.g. `"files/"`, `"composables/"`, `"lib/"`)
+ */
+export function groupFilesByDirectory(
+  files: AssetFile[],
+  prefix: string,
+): Map<string, AssetFile[]> {
+  const groupMap = new Map<string, AssetFile[]>()
+
+  for (const f of files) {
+    const rel = f.path.startsWith(prefix) ? f.path.slice(prefix.length) : f.path
+    const segments = rel.split('/')
+    // If there's more than one segment → first segment is the directory (group name)
+    // If only one segment → it's a standalone file, group by filename without ext
+    const group = segments.length > 1
+      ? segments[0]
+      : segments[0].replace(/\.[^.]+$/, '')
+
+    if (!groupMap.has(group))
+      groupMap.set(group, [])
+    groupMap.get(group)!.push(f)
+  }
+
+  return groupMap
+}
+
 // ─── Abstract collector ─────────────────────────────────────────────
 
 /**

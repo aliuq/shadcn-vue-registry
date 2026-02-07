@@ -1,11 +1,11 @@
 import type { RegistryItem } from 'shadcn-vue/schema'
 import type { AssetFile, CollectorContext, CollectorResult, RegistryTypeConfig } from '../utils/types'
 import { promises as fs } from 'node:fs'
-import { basename, relative } from 'node:path'
+import { relative } from 'node:path'
 import { config } from '../utils/config'
 import { walkFiles } from '../utils/fileScanner'
 import { REGISTRY_TYPE_CONFIGS } from '../utils/types'
-import { BaseCollector, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
+import { BaseCollector, groupFilesByDirectory, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
 
 /**
  * Collects page files (type `registry:page`).
@@ -42,12 +42,19 @@ export class PageCollector extends BaseCollector {
         .replace(/@repo\/elements\//g, `@/components/${config.baseName}/`)
       const rel = relative(sourceDir, abs).split('\\').join('/')
 
+      // For pages nested inside a group directory, strip the group prefix
+      // from the target fallback.
+      const segments = rel.split('/')
+      const targetFallback = segments.length > 1
+        ? `pages/${segments.slice(1).join('/')}`
+        : `pages/${rel}`
+
       files.push({
         type: 'registry:page',
         path: `pages/${rel}`,
         content: parsed,
         // target is REQUIRED for registry:page — resolved from meta.json or defaults to path
-        target: resolveTarget(`pages/${rel}`, 'registry:page', ctx, `pages/${rel}`),
+        target: resolveTarget(`pages/${rel}`, 'registry:page', ctx, targetFallback),
       })
     }
 
@@ -58,38 +65,39 @@ export class PageCollector extends BaseCollector {
     const items: RegistryItem[] = []
     const outputs = new Map<string, Record<string, unknown>>()
 
-    for (const f of files) {
-      const fileName = basename(f.path)
-      const name = fileName.replace(/\.(vue|ts)$/, '')
-      const deps = this.analyzeFileDependencies([f], ctx)
+    // Group by top-level directory or standalone file
+    const groupMap = groupFilesByDirectory(files, 'pages/')
+
+    for (const [group, groupFiles] of groupMap) {
+      const deps = this.analyzeFileDependencies(groupFiles, ctx, { currentGroup: group })
 
       const item: RegistryItem = {
-        name,
+        name: group,
         type: 'registry:page',
-        title: `${toTitle(name)} Page`,
-        description: `${toTitle(name)} page component.`,
-        files: [{
+        title: `${toTitle(group)} Page`,
+        description: `${toTitle(group)} page component.`,
+        files: groupFiles.map(f => ({
           path: f.path,
           type: f.type,
           target: f.target!, // required for registry:page
-        }],
+        })),
       }
       items.push(item)
 
       const itemJson = {
         $schema: 'https://shadcn-vue.com/schema/registry-item.json',
         ...item,
-        files: [f],
+        files: groupFiles,
         dependencies: deps.dependencies,
         devDependencies: deps.devDependencies,
         registryDependencies: deps.registryDependencies,
       }
 
-      if (validateRegistryItem(itemJson, `page:${name}`)) {
-        outputs.set(name, itemJson)
+      if (validateRegistryItem(itemJson, `page:${group}`)) {
+        outputs.set(group, itemJson)
       }
       else {
-        console.error(`Skipping invalid page: ${name}`)
+        console.error(`Skipping invalid page: ${group}`)
       }
     }
 

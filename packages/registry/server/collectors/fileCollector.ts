@@ -1,11 +1,11 @@
 import type { RegistryItem } from 'shadcn-vue/schema'
 import type { AssetFile, CollectorContext, CollectorResult, RegistryTypeConfig } from '../utils/types'
 import { promises as fs } from 'node:fs'
-import { basename, relative } from 'node:path'
+import { relative } from 'node:path'
 import { config } from '../utils/config'
 import { walkFiles } from '../utils/fileScanner'
 import { REGISTRY_TYPE_CONFIGS } from '../utils/types'
-import { BaseCollector, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
+import { BaseCollector, groupFilesByDirectory, resolveTarget, toTitle, validateRegistryItem } from './baseCollector'
 
 /**
  * Collects arbitrary files (type `registry:file`).
@@ -41,12 +41,18 @@ export class FileCollector extends BaseCollector {
         .replace(/@repo\/elements\//g, `@/components/${config.baseName}/`)
       const rel = relative(sourceDir, abs).split('\\').join('/')
 
+      // For files nested inside a group directory, strip the group prefix
+      // from the target fallback so it installs to the correct location.
+      // e.g. rel = "markdownlint/.markdownlint.json" → fallback = ".markdownlint.json"
+      const segments = rel.split('/')
+      const targetFallback = segments.length > 1 ? segments.slice(1).join('/') : rel
+
       files.push({
         type: 'registry:file',
         path: `files/${rel}`,
         content: parsed,
         // target is REQUIRED for registry:file — resolved from meta.json or defaults to rel path
-        target: resolveTarget(`files/${rel}`, 'registry:file', ctx, rel),
+        target: resolveTarget(`files/${rel}`, 'registry:file', ctx, targetFallback),
       })
     }
 
@@ -57,38 +63,39 @@ export class FileCollector extends BaseCollector {
     const items: RegistryItem[] = []
     const outputs = new Map<string, Record<string, unknown>>()
 
-    for (const f of files) {
-      const fileName = basename(f.path)
-      const name = fileName.replace(/\.[^.]+$/, '')
-      const deps = this.analyzeFileDependencies([f], ctx)
+    // Group by top-level directory or standalone file
+    const groupMap = groupFilesByDirectory(files, 'files/')
+
+    for (const [group, groupFiles] of groupMap) {
+      const deps = this.analyzeFileDependencies(groupFiles, ctx, { currentGroup: group })
 
       const item: RegistryItem = {
-        name,
+        name: group,
         type: 'registry:file',
-        title: toTitle(name),
-        description: `${toTitle(name)} file.`,
-        files: [{
+        title: toTitle(group),
+        description: `${toTitle(group)} file.`,
+        files: groupFiles.map(f => ({
           path: f.path,
           type: f.type,
           target: f.target!, // required for registry:file
-        }],
+        })),
       }
       items.push(item)
 
       const itemJson = {
         $schema: 'https://shadcn-vue.com/schema/registry-item.json',
         ...item,
-        files: [f],
+        files: groupFiles,
         dependencies: deps.dependencies,
         devDependencies: deps.devDependencies,
         registryDependencies: deps.registryDependencies,
       }
 
-      if (validateRegistryItem(itemJson, `file:${name}`)) {
-        outputs.set(name, itemJson)
+      if (validateRegistryItem(itemJson, `file:${group}`)) {
+        outputs.set(group, itemJson)
       }
       else {
-        console.error(`Skipping invalid file: ${name}`)
+        console.error(`Skipping invalid file: ${group}`)
       }
     }
 

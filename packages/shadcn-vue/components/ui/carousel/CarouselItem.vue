@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { WithClassAsProps } from './interface'
+import type { WithClassAsProps } from "./interface"
 import { cn } from '@repo/shadcn-vue/lib/utils'
-import { useCarousel } from './useCarousel'
+import { useCarousel } from "./useCarousel"
 
 const props = defineProps<WithClassAsProps>()
 

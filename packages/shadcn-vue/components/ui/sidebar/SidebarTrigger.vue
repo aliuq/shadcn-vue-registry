@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-import { Button } from '@repo/shadcn-vue/components/ui/button'
+import type { HTMLAttributes } from "vue"
+import { PanelLeft } from "lucide-vue-next"
 import { cn } from '@repo/shadcn-vue/lib/utils'
-import { PanelLeft } from 'lucide-vue-next'
-import { useSidebar } from './utils'
+import { Button } from '@repo/shadcn-vue/components/ui/button'
+import { useSidebar } from "./utils"
 
 const props = defineProps<{
-  class?: HTMLAttributes['class']
+  class?: HTMLAttributes["class"]
 }>()
 
 const { toggleSidebar } = useSidebar()

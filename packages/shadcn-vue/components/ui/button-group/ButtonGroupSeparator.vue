@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { SeparatorProps } from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
-import { Separator } from '@repo/shadcn-vue/components/ui/separator'
+import type { SeparatorProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
 import { cn } from '@repo/shadcn-vue/lib/utils'
-import { reactiveOmit } from '@vueuse/core'
+import { Separator } from '@repo/shadcn-vue/components/ui/separator'
 
-const props = withDefaults(defineProps<SeparatorProps & { class?: HTMLAttributes['class'] }>(), {
-  orientation: 'vertical',
+const props = withDefaults(defineProps<SeparatorProps & { class?: HTMLAttributes["class"] }>(), {
+  orientation: "vertical",
 })
-const delegatedProps = reactiveOmit(props, 'class')
+const delegatedProps = reactiveOmit(props, "class")
 </script>
 
 <template>

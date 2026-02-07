@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { InputGroupButtonProps } from '.'
-import { Button } from '@repo/shadcn-vue/components/ui/button'
+import type { InputGroupButtonProps } from "."
 import { cn } from '@repo/shadcn-vue/lib/utils'
-import { inputGroupButtonVariants } from '.'
+import { Button } from '@repo/shadcn-vue/components/ui/button'
+import { inputGroupButtonVariants } from "."
 
 const props = withDefaults(defineProps<InputGroupButtonProps>(), {
-  size: 'xs',
-  variant: 'ghost',
+  size: "xs",
+  variant: "ghost",
 })
 </script>
 

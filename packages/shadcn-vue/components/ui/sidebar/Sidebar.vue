@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { SidebarProps } from '.'
+import type { SidebarProps } from "."
+import { cn } from '@repo/shadcn-vue/lib/utils'
 import { Sheet, SheetContent } from '@repo/shadcn-vue/components/ui/sheet'
 import SheetDescription from '@repo/shadcn-vue/components/ui/sheet/SheetDescription.vue'
 import SheetHeader from '@repo/shadcn-vue/components/ui/sheet/SheetHeader.vue'
 import SheetTitle from '@repo/shadcn-vue/components/ui/sheet/SheetTitle.vue'
-import { cn } from '@repo/shadcn-vue/lib/utils'
-import { SIDEBAR_WIDTH_MOBILE, useSidebar } from './utils'
+import { SIDEBAR_WIDTH_MOBILE, useSidebar } from "./utils"
 
 defineOptions({
   inheritAttrs: false,
 })
 
 const props = withDefaults(defineProps<SidebarProps>(), {
-  side: 'left',
-  variant: 'sidebar',
-  collapsible: 'offcanvas',
+  side: "left",
+  variant: "sidebar",
+  collapsible: "offcanvas",
 })
 
 const { isMobile, state, openMobile, setOpenMobile } = useSidebar()

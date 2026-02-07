@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry.json",
+  "name": "aliuq",
+  "homepage": "https://bilishare.com",
+  "items": [
+    {
+      "name": "hello-world",
+      "type": "registry:component",
+      "title": "Hello World",
+      "description": "A simple hello world component.",
+      "files": [
+        {
+          "path": "components/aq/hello-world/HelloWorld.vue",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/aq/hello-world/index.ts",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

@@ -63,7 +63,7 @@ export class ComponentCollector extends BaseCollector {
         name: group,
         type: 'registry:component',
         title: toTitle(group),
-        description: `AI-powered ${group.replace('-', ' ')} components.`,
+        description: `${group.replace('-', ' ')} components.`,
         files: groupFiles.map(f => ({
           path: f.path,
           type: f.type as 'registry:component',

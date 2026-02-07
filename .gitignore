@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.turbo
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +23,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Testing
+coverage
+**/__screenshots__
+
+.code-group.md
+
+.pnpm-store

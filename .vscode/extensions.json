@@ -1,6 +1,8 @@
 {
   "recommendations": [
     "Vue.volar",
-    "bradlc.vscode-tailwindcss"
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "antfu.pnpm-catalog-lens"
   ]
 }

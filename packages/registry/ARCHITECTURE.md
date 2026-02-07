@@ -73,6 +73,7 @@ packages/registry/server/
 在 `types.ts` 的 `TARGET_REQUIRED_TYPES` 中定义为单一事实来源。
 
 target 解析优先级（由 `baseCollector.ts` 的 `resolveTarget()` 管理）：
+
 1. `meta.json` 中的显式映射（最高优先级）
 2. Collector 提供的 fallback 默认值
 3. `undefined`（仅对可选类型）

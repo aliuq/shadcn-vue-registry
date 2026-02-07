@@ -4,6 +4,7 @@ export default antfu({
   vue: true,
   typescript: true,
   pnpm: true,
+  markdown: false,
   ignores: [
     '**/.nitro/**',
     'packages/registry/server/assets/**',

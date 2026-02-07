@@ -16,7 +16,7 @@ export interface WalkOptions {
 /**
  * Recursively walks a directory and returns absolute paths of matching files.
  */
-export async function walkFiles(dir: string, options: WalkOptions): Promise<string[]> {
+export async function walkFiles(dir: string, options: WalkOptions = {} as WalkOptions): Promise<string[]> {
   const out: string[] = []
   let entries: Dirent[] = []
   try {
@@ -32,8 +32,14 @@ export async function walkFiles(dir: string, options: WalkOptions): Promise<stri
       out.push(...nested)
     }
     else if (entry.isFile()) {
-      if (options.excludePaths?.has(full))
+      if (options?.excludePaths?.has(full))
         continue
+
+      if (!options.extensions?.length) {
+        out.push(full)
+        continue
+      }
+
       const matches = options.extensions.some(ext => entry.name.endsWith(ext))
       if (matches) {
         out.push(full)
@@ -77,7 +83,8 @@ export function extractSourceCode(file: AssetFile): string {
     const { descriptor } = parseSFC(file.content)
     return [descriptor.script?.content || '', descriptor.scriptSetup?.content || ''].join('\n')
   }
-  if (file.path.endsWith('.ts')) {
+  const exts = ['.ts', '.js', '.tsx', '.jsx', '.mjs', '.mts']
+  if (exts.some(ext => file.path.endsWith(ext))) {
     return file.content
   }
   return ''

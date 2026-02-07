@@ -14,8 +14,6 @@ export type RegistryItemType
     | 'registry:theme'
     | 'registry:style'
     | 'registry:example'
-    | 'registry:item'
-    | 'registry:internal'
 
 // ─── Target requirement per type ────────────────────────────────────
 // Per the shadcn-vue file schema (discriminated union on `type`):

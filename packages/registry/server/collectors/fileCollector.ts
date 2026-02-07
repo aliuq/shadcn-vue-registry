@@ -28,7 +28,7 @@ export class FileCollector extends BaseCollector {
 
     let paths: string[] = []
     try {
-      paths = await walkFiles(sourceDir, { extensions: ['.ts', '.vue', '.json', '.yaml', '.yml', '.css'] })
+      paths = await walkFiles(sourceDir)
     }
     catch {
       return files

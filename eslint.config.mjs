@@ -13,9 +13,4 @@ export default antfu({
   rules: {
     'pnpm/json-enforce-catalog': 0,
   },
-}, {
-  files: ['packages/examples/**/*.vue', 'packages/examples/**/*.ts'],
-  rules: {
-    'no-console': 'off',
-  },
 })

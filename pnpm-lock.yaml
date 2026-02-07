@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@antfu/eslint-config':
+      specifier: ^6.4.2
+      version: 6.4.2
     '@vueuse/core':
       specifier: ^14.1.0
       version: 14.1.0
@@ -117,6 +120,9 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4(katex@0.16.25)(mermaid@11.12.2)(shiki@3.20.0)(vue@3.5.25(typescript@5.9.3))
     devDependencies:
+      '@antfu/eslint-config':
+        specifier: 'catalog:'
+        version: 6.4.2(@vue/compiler-sfc@3.5.25)(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.15)
       '@types/hast':
         specifier: ^3.0.4
         version: 3.0.4
@@ -5660,6 +5666,7 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.1.0:

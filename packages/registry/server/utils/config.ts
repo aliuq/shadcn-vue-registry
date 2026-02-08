@@ -5,7 +5,7 @@ import process from 'node:process'
  * Values come from environment variables with sensible defaults.
  */
 export const config = {
-  baseName: process.env.NITRO_BASE_NAME || 'specific-base-name',
+  baseName: process.env.NITRO_BASE_NAME || 'self',
   homepage: process.env.NITRO_HOMEPAGE || 'https://example.com',
   baseUrl: process.env.NITRO_BASE_URL || 'http://localhost:3001',
   // Build lifecycle

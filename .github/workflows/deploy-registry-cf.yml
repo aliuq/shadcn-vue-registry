@@ -42,8 +42,8 @@ jobs:
         run: pnpm build:registry
         env:
           BASE_NAME: self
-          HOMEPAGE: https://registry.llll.host/all.json
-          BASE_URL: https://registry.llll.host
+          HOMEPAGE: http://localhost:3001/all.json
+          BASE_URL: http://localhost:3001
           REGISTRY_TITLE: ''
           REGISTRY_DESCRIPTION: ''
 

@@ -13,6 +13,7 @@
     "dev": "turbo run dev",
     "dev:registry": "pnpm --filter registry dev",
     "build:registry": "pnpm --filter registry build",
+    "build:registry:vercel": "pnpm --filter registry build:vercel",
     "prepare": "pnpm simple-git-hooks",
     "lint": "markdownlint . && eslint . && turbo run lint",
     "lint:fix": "eslint . --fix",

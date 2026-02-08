@@ -4,6 +4,7 @@ dist
 .nitro
 .cache
 .output
+.vercel
 .env
 .env.local
 

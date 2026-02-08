@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "nitro build",
+    "build:vercel": "nitro build --preset vercel",
     "dev": "nitro dev --port 3001"
   },
   "dependencies": {

@@ -3,11 +3,9 @@ import type { Registry, RegistryItem } from 'shadcn-vue/schema'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { defineEventHandler, getHeader, readBody, sendRedirect } from 'h3'
-import { useRuntimeConfig, useStorage } from 'nitropack/runtime'
+import { useStorage } from 'nitropack/runtime'
 import { z } from 'zod'
-import { REGISTRY_SEARCH_DIRS } from '../utils/config'
-
-const config = useRuntimeConfig()
+import { config, REGISTRY_SEARCH_DIRS } from '../utils/config'
 
 const REGISTRY_STORAGE_BASE = 'assets:registry'
 const REGISTRY_INDEX_FILE = 'registry.json'

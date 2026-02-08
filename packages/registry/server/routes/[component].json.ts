@@ -1,7 +1,7 @@
 import type { Registry, RegistryItem } from 'shadcn-vue/schema'
 import { eventHandler, getRequestURL } from 'h3'
-import { useRuntimeConfig, useStorage } from 'nitropack/runtime'
-import { REGISTRY_SEARCH_DIRS } from '../utils/config'
+import { useStorage } from 'nitropack/runtime'
+import { config, REGISTRY_SEARCH_DIRS } from '../utils/config'
 
 interface RegistryErrorResponse {
   error: string
@@ -40,7 +40,6 @@ function transformRegistryDependencies(item: RegistryItem, registryUrl: string):
 export default eventHandler(async (event) => {
   const url = getRequestURL(event)
   const registryUrl = url.origin
-  const config = useRuntimeConfig(event)
   const storage = useStorage(`assets:registry`)
 
   const componentParam = event.context.params?.component as string | undefined

@@ -23,8 +23,4 @@ export default defineNitroConfig({
       'safer-buffer': 'node:buffer',
     },
   },
-  runtimeConfig: {
-    baseName: 'specific-base-name',
-    homepage: 'https://example.com',
-  },
 })

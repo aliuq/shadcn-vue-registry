@@ -5,10 +5,9 @@ import process from 'node:process'
  * Values come from environment variables with sensible defaults.
  */
 export const config = {
-  baseName: process.env.NITRO_BASE_NAME || 'self',
-  homepage: process.env.NITRO_HOMEPAGE || 'https://example.com',
-  baseUrl: process.env.NITRO_BASE_URL || 'http://localhost:3001',
-  // Build lifecycle
+  baseName: process.env.BASE_NAME || 'self',
+  homepage: process.env.HOMEPAGE || 'https://example.com',
+  baseUrl: process.env.BASE_URL || 'http://localhost:3001',
   registryTitle: process.env.REGISTRY_TITLE || 'All Elements',
   registryDescription: process.env.REGISTRY_DESCRIPTION || 'A collection of all elements.',
 } as const

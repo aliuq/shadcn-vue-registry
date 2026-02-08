@@ -40,6 +40,12 @@ jobs:
 
       - name: Build registry (Nitro Cloudflare Worker)
         run: pnpm build:registry
+        env:
+          BASE_NAME: self
+          HOMEPAGE: https://registry.llll.host/all.json
+          BASE_URL: https://registry.llll.host
+          REGISTRY_TITLE: ''
+          REGISTRY_DESCRIPTION: ''
 
       - name: Publish to Cloudflare Workers via Wrangler
         working-directory: packages/registry

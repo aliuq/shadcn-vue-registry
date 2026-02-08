@@ -16,6 +16,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Publish registry (Nitro) to Cloudflare Workers
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN }} && ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

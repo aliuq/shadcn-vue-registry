@@ -92,8 +92,8 @@ export interface DependencyAnalysisResult {
 export interface AnalyzeDependenciesOptions {
   filePath?: string
   currentGroup?: string
-  /** If true, skip adding AI component dependencies (for all.json bundling) */
-  skipAiComponentDeps?: boolean
+  /** If true, skip adding internal cross-component dependencies (for all.json bundling) */
+  skipInternalDeps?: boolean
   /** Mapping from import package to @types/ packages */
   typesDevDepsMap?: Map<string, string[]>
 }
@@ -130,14 +130,14 @@ function resolveRegistryDep(
     return
   }
 
-  // Internal AI components: @/components/<baseName>/<slug>
-  const aiComponentPrefix = `@/components/${baseName}/`
-  if (mod.startsWith(aiComponentPrefix)) {
-    const slug = extractRegistrySlug(mod, aiComponentPrefix)
+  // Internal components: @/components/<baseName>/<slug>
+  const internalComponentPrefix = `@/components/${baseName}/`
+  if (mod.startsWith(internalComponentPrefix)) {
+    const slug = extractRegistrySlug(mod, internalComponentPrefix)
     if (slug) {
       if (options?.currentGroup && slug === options.currentGroup)
         return
-      if (!options?.skipAiComponentDeps)
+      if (!options?.skipInternalDeps)
         registryDependencies.add(`${baseUrl}/${slug}.json`)
     }
     return
@@ -149,7 +149,7 @@ function resolveRegistryDep(
     if (slug) {
       if (options?.currentGroup && slug === options.currentGroup)
         return
-      if (!options?.skipAiComponentDeps)
+      if (!options?.skipInternalDeps)
         registryDependencies.add(`${baseUrl}/${slug}.json`)
     }
     return
@@ -161,7 +161,7 @@ function resolveRegistryDep(
     if (slug) {
       if (options?.currentGroup && slug === options.currentGroup)
         return
-      if (!options?.skipAiComponentDeps)
+      if (!options?.skipInternalDeps)
         registryDependencies.add(`${baseUrl}/${slug}.json`)
     }
   }

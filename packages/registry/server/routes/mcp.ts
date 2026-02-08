@@ -17,7 +17,7 @@ const SERVER_INFO = {
   version: '1.0.0',
 }
 
-const DOCS_REDIRECT = config.baseURL
+const DOCS_REDIRECT = '/all.json'
 
 const getComponentInputSchema = z.object({
   component: z

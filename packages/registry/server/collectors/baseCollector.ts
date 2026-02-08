@@ -142,7 +142,7 @@ export abstract class BaseCollector {
     ctx: CollectorContext,
     options?: {
       currentGroup?: string
-      skipAiComponentDeps?: boolean
+      skipInternalDeps?: boolean
     },
   ): { dependencies: string[], devDependencies: string[], registryDependencies: string[] } {
     const deps = new Set<string>()
@@ -158,7 +158,7 @@ export abstract class BaseCollector {
       const analysis = analyzeDependencies(imports, ctx.allowedDeps, ctx.allowedDevDeps, {
         filePath: f.path,
         currentGroup: options?.currentGroup,
-        skipAiComponentDeps: options?.skipAiComponentDeps ?? false,
+        skipInternalDeps: options?.skipInternalDeps ?? false,
         typesDevDepsMap: ctx.typesDevDepsMap,
       })
       analysis.dependencies.forEach(d => deps.add(d))

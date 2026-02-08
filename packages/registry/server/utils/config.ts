@@ -26,7 +26,6 @@ export const REGISTRY_SEARCH_DIRS = [
   'examples',
   'pages',
   'files',
-  'composables',
   'themes',
   'styles',
 ] as const

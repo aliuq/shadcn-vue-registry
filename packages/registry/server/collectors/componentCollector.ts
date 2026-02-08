@@ -56,14 +56,14 @@ export class ComponentCollector extends BaseCollector {
       // Analyze dependencies for this group
       const deps = this.analyzeFileDependencies(groupFiles, ctx, {
         currentGroup: group,
-        skipAiComponentDeps: false,
+        skipInternalDeps: false,
       })
 
       const item: RegistryItem = {
         name: group,
         type: 'registry:component',
         title: toTitle(group),
-        description: `${group.replace('-', ' ')} components.`,
+        description: `${toTitle(group)} components.`,
         files: groupFiles.map(f => ({
           path: f.path,
           type: f.type as 'registry:component',

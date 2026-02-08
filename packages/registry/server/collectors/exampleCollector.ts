@@ -56,7 +56,7 @@ export class ExampleCollector extends BaseCollector {
         name,
         type: 'registry:block',
         title: `${toTitle(name)} Example`,
-        description: `Example implementation of ${name.replace('-', ' ')}.`,
+        description: `Example implementation of ${toTitle(name)}.`,
         files: [{
           path: ef.path,
           type: ef.type as 'registry:block',

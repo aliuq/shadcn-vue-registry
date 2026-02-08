@@ -118,7 +118,7 @@ export const REGISTRY_TYPE_CONFIGS: Record<string, RegistryTypeConfig> = {
 export interface AssetFile {
   /** Registry type of this file */
   type: RegistryItemType
-  /** Relative path as it appears in the output JSON (e.g. "components/ai/chatbot/Chatbot.vue") */
+  /** Relative path as it appears in the output JSON (e.g. "components/my-registry/hello-world/HelloWorld.vue") */
   path: string
   /** File content (with import aliases already rewritten) */
   content: string

@@ -133,7 +133,7 @@ export async function generateRegistryAssets(ctx: { rootDir: string }) {
 
   // ── Generate all.json (bundled) ─────────────────────────────────
   // Collects ALL component-type files into a single registry item.
-  // For all.json: skip AI component cross-deps, only keep shadcn-vue deps.
+  // For all.json: skip internal cross-deps, only keep shadcn-vue deps.
   const bundleFiles: AssetFile[] = []
   const bundleDeps = new Set<string>()
   const bundleDevDeps = new Set<string>()
@@ -161,7 +161,7 @@ export async function generateRegistryAssets(ctx: { rootDir: string }) {
       const imports = parseImportsFromCode(code)
       const analysis = analyzeDependencies(imports, allowedDeps, allowedDevDeps, {
         filePath: f.path,
-        skipAiComponentDeps: true,
+        skipInternalDeps: true,
         typesDevDepsMap,
       })
       analysis.dependencies.forEach(d => bundleDeps.add(d))

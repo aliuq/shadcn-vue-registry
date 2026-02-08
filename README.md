@@ -195,4 +195,4 @@ Configure these in your CI or hosting environment:
 
 ---
 
-The project architecture is forked from [ai-elements-vue](https://github.com/vuepont/ai-elements-vue), with the core construction logic and documentation implemented by `Claude Opus 4.6`.
+The project architecture is forked from ❤️ [AI Elements Vue](https://github.com/vuepont/ai-elements-vue), with the core construction logic and documentation implemented by `Claude Opus 4.6`.

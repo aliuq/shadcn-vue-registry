@@ -1,11 +1,11 @@
 ```mermaid
 graph TD
-    A[registryBuilder.ts<br/>主编排器] --> B[collectors/index.ts<br/>Collector 工厂]
-    A --> C[types.ts<br/>类型 & Target 规则]
-    A --> D[config.ts<br/>项目配置]
-    A --> E[dependencyAnalyzer.ts<br/>依赖分析]
-    A --> F[fileScanner.ts<br/>文件扫描]
-    A --> META[meta.json<br/>Target 映射]
+    A[registryBuilder.ts<br/>Main orchestrator] --> B[collectors/index.ts<br/>Collector factory]
+    A --> C[types.ts<br/>Types & target rules]
+    A --> D[config.ts<br/>Project config]
+    A --> E[dependencyAnalyzer.ts<br/>Dependency analysis]
+    A --> F[fileScanner.ts<br/>File scanner]
+    A --> META[meta.json<br/>Target mapping]
 
     B --> G[ComponentCollector<br/>registry:component]
     B --> H[HookCollector<br/>registry:hook]
@@ -17,7 +17,7 @@ graph TD
     B --> S[StyleCollector<br/>registry:style]
     B --> T[ThemeCollector<br/>registry:theme]
 
-    G --> N[BaseCollector<br/>抽象基类]
+    G --> N[BaseCollector<br/>Abstract base class]
     H --> N
     I --> N
     J --> N
@@ -38,61 +38,61 @@ graph TD
     style META fill:#fc9,stroke:#333
 ```
 
-## 文件结构
+## File structure
 
 ```
 packages/registry/server/
 ├── hooks/
-│   └── index.ts                  # Nitro build hook → 调用 registryBuilder
+│   └── index.ts                  # Nitro build hook → calls registryBuilder
 ├── routes/
-│   ├── [component].json.ts       # HTTP handler: 按名称返回 registry item
-│   ├── index.ts                  # 首页
+│   ├── [component].json.ts       # HTTP handler: return registry item by name
+│   ├── index.ts                  # index route
 │   └── mcp.ts                    # MCP server endpoint
-├── collectors/                   # 各类型的 Collector 实现
-│   ├── baseCollector.ts          # 抽象基类 (验证、依赖分析、resolveTarget)
+├── collectors/                   # Collector implementations for each type
+│   ├── baseCollector.ts          # Abstract base (validation, dependency analysis, resolveTarget)
 │   ├── componentCollector.ts     # registry:component
 │   ├── hookCollector.ts          # registry:hook (composables)
 │   ├── exampleCollector.ts       # registry:block
 │   ├── libCollector.ts           # registry:lib
 │   ├── uiCollector.ts            # registry:ui
-│   ├── pageCollector.ts          # registry:page  (target 必填)
-│   ├── fileCollector.ts          # registry:file   (target 必填)
+│   ├── pageCollector.ts          # registry:page  (target required)
+│   ├── fileCollector.ts          # registry:file   (target required)
 │   ├── styleCollector.ts         # registry:style  (JSON-only, cssVars/css)
 │   ├── themeCollector.ts         # registry:theme  (JSON-only, cssVars)
-│   └── index.ts                  # 工厂: createDefaultCollectors()
+│   └── index.ts                  # Factory: createDefaultCollectors()
 └── utils/
-    ├── config.ts                 # 项目配置 (baseName, baseUrl 等)
-    ├── types.ts                  # 统一类型 + Target 必填规则 + TargetMeta
-    ├── dependencyAnalyzer.ts     # ts-morph 导入解析 & 依赖分析
-    ├── fileScanner.ts            # 通用文件遍历 & 源码提取
-    └── registryBuilder.ts        # 精简的主编排器
+    ├── config.ts                 # Project config (baseName, baseUrl, etc.)
+    ├── types.ts                  # Shared types + target-required rules + TargetMeta
+    ├── dependencyAnalyzer.ts     # ts-morph import parsing & dependency analysis
+    ├── fileScanner.ts            # General file traversal & source extraction
+    └── registryBuilder.ts        # Lightweight main orchestrator
 ```
 
-## Target 规则
+## Target rules
 
-在 `types.ts` 的 `TARGET_REQUIRED_TYPES` 中定义为单一事实来源。
+The single source of truth for which types require a `target` is `TARGET_REQUIRED_TYPES` in `types.ts`.
 
-target 解析优先级（由 `baseCollector.ts` 的 `resolveTarget()` 管理）：
+Target resolution order (managed by `resolveTarget()` in `baseCollector.ts`):
 
-1. `meta.json` 中的显式映射（最高优先级）
-2. Collector 提供的 fallback 默认值
-3. `undefined`（仅对可选类型）
+1. Explicit mapping in `meta.json` (highest priority)
+2. Collector-provided fallback defaults
+3. `undefined` (only for optional types)
 
-| 类型                 | target   | 默认值                        |
-| -------------------- | -------- | ----------------------------- |
-| `registry:component` | 可选     | 不设置（shadcn-vue 自动处理） |
-| `registry:hook`      | 可选     | 不设置（可通过 meta.json 覆盖）|
-| `registry:lib`       | 可选     | 不设置（可通过 meta.json 覆盖）|
-| `registry:ui`        | 可选     | 不设置                        |
-| `registry:block`     | 可选     | 不设置                        |
-| `registry:page`      | **必填** | `pages/<relative-path>`       |
-| `registry:file`      | **必填** | 由 collector 显式设置         |
-| `registry:style`     | —        | JSON-only，无文件             |
-| `registry:theme`     | —        | JSON-only，无文件             |
+| Type                 | target   | Default behaviour               |
+| -------------------- | -------- | ------------------------------- |
+| `registry:component` | optional | unset (handled by shadcn-vue)    |
+| `registry:hook`      | optional | unset (can be overridden by meta.json) |
+| `registry:lib`       | optional | unset (can be overridden by meta.json) |
+| `registry:ui`        | optional | unset                            |
+| `registry:block`     | optional | unset                            |
+| `registry:page`      | **required** | `pages/<relative-path>`         |
+| `registry:file`      | **required** | explicitly set by the collector |
+| `registry:style`     | —        | JSON-only, no files              |
+| `registry:theme`     | —        | JSON-only, no files              |
 
 ## meta.json
 
-位于 `packages/elements/meta.json`，存储 `path → target` 映射：
+Located at `packages/elements/meta.json`, this file stores `path → target` mappings:
 
 ```json
 {
@@ -103,29 +103,28 @@ target 解析优先级（由 `baseCollector.ts` 的 `resolveTarget()` 管理）�
 }
 ```
 
-所有 Collector 在设置 `target` 时都会先查询 `meta.json`，
-再 fallback 到默认值。这使得 target 可以在不修改代码的情况下灵活配置。
+All collectors consult `meta.json` when resolving a `target`, and fall back to defaults afterwards. This allows `target` values to be adjusted without changing source code.
 
-## Collector 类型
+## Collector types
 
-| Collector         | 数据来源                       | 输出到 all.json | 输出到 registry.json |
-| ----------------- | ------------------------------ | --------------- | -------------------- |
-| Component         | `src/components/` 扫描         | ✅              | ✅                   |
-| Hook              | `src/composables/` 扫描        | ✅              | ✅                   |
-| Lib               | `src/lib/` 扫描                | ✅              | ✅                   |
-| UI                | `src/ui/` 扫描                 | ✅              | ✅                   |
-| File              | `src/files/` 扫描              | ✅              | ✅                   |
-| Example           | `packages/examples/src/` 扫描  | ❌              | ✅                   |
-| Page              | `src/pages/` 扫描              | ❌              | ✅                   |
-| **Style**         | `src/styles/*.json` 读取       | ❌              | ✅                   |
-| **Theme**         | `src/themes/*.json` 读取       | ❌              | ✅                   |
+| Collector         | Source                          | Included in all.json | Included in registry.json |
+| ----------------- | ------------------------------- | -------------------- | ------------------------- |
+| Component         | Scans `src/components/`         | ✅                   | ✅                        |
+| Hook              | Scans `src/composables/`        | ✅                   | ✅                        |
+| Lib               | Scans `src/lib/`                | ✅                   | ✅                        |
+| UI                | Scans `src/ui/`                 | ✅                   | ✅                        |
+| File              | Scans `src/files/`              | ✅                   | ✅                        |
+| Example           | Scans `packages/examples/src/`  | ❌                   | ✅                        |
+| Page              | Scans `src/pages/`              | ❌                   | ✅                        |
+| **Style**         | Reads `src/styles/*.json`       | ❌                   | ✅                        |
+| **Theme**         | Reads `src/themes/*.json`       | ❌                   | ✅                        |
 
-## 扩展步骤
+## Extension steps
 
-添加新类型只需 3 步：
+Adding a new type requires three steps:
 
-1. 在 `REGISTRY_TYPE_CONFIGS`（types.ts）加一条配置
-2. 创建新 collector 继承 `BaseCollector`
-3. 在 `collectors/index.ts` 的 `createDefaultCollectors()` 中注册
+1. Add a configuration entry in `REGISTRY_TYPE_CONFIGS` (`types.ts`).
+2. Create a new collector that extends `BaseCollector`.
+3. Register it in `createDefaultCollectors()` inside `collectors/index.ts`.
 
-对于 JSON-only 类型（如 style/theme），覆盖 `collectAndBuild()` 方法。
+For JSON-only types (e.g. style/theme), override the `collectAndBuild()` method.

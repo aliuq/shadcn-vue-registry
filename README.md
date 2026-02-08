@@ -40,7 +40,7 @@ npx shadcn-vue@latest add http://localhost:3001/hello-world.json
 
 ---
 
-## Registry API (shadcn-vue compatible)
+## Registry API
 
 | Endpoint | Description |
 |----------|-------------|
@@ -60,6 +60,12 @@ These schemas define the structure and constraints for fields like `name`, `type
 ## Create Your Own Registry Items
 
 Follow these steps to add or customize registry items in this template.
+
+```bash
+npx degit https://github.com/aliuq/shadcn-vue-registry your-registry
+cd your-registry
+pnpm install
+```
 
 ### 1. Add Your Resource
 

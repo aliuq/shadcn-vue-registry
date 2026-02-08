@@ -1,13 +1,11 @@
-name: Deploy registry
+name: Deploy registry to Cloudflare Workers
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'apps/registry/**'
       - 'packages/elements/**'
-      - 'packages/examples/**'
   workflow_dispatch:
 
 permissions:
@@ -22,17 +20,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup (Install Node & pnpm)
-        uses: ./.github/actions/setup
+      - name: Setup node & pnpm
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: corepack enable
 
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
 
       - name: Build registry (Nitro Cloudflare Worker)
-        run: pnpm --filter ./apps/registry build
+        run: pnpm build:registry
 
       - name: Publish to Cloudflare Workers via Wrangler
-        working-directory: apps/registry
+        working-directory: packages/registry
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

@@ -1,6 +1,6 @@
 {
-  "name": "ai-elements-vue",
-  "version": "1.2.2",
+  "name": "shadcn-vue-registry",
+  "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@10.24.0",
   "engines": {
@@ -9,20 +9,16 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "test": "turbo run test",
     "dev": "turbo run dev",
     "dev:registry": "pnpm --filter registry dev",
     "build:registry": "pnpm --filter registry build",
     "build:registry:vercel": "pnpm --filter registry build:vercel",
     "prepare": "pnpm simple-git-hooks",
     "lint": "markdownlint . && eslint . && turbo run lint",
-    "lint:fix": "eslint . --fix",
-    "bumpp": "bumpp package.json packages/*/package.json"
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.4.2",
-    "@commitlint/cli": "^20.2.0",
-    "@commitlint/config-conventional": "^20.2.0",
     "bumpp": "^10.3.2",
     "eslint": "^9.39.1",
     "lint-staged": "^16.2.7",
@@ -32,15 +28,9 @@
     "typescript": "catalog:"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged",
-    "commit-msg": "pnpm commitlint --edit ${1}"
+    "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
     "*": "eslint --fix"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   }
 }

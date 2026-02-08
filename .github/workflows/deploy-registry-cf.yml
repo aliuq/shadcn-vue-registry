@@ -48,7 +48,7 @@ jobs:
           REGISTRY_DESCRIPTION: ''
 
       - name: Publish to Cloudflare Workers via Wrangler
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+        if: ${{ env.CLOUDFLARE_API_TOKEN && env.CLOUDFLARE_ACCOUNT_ID }}
         working-directory: packages/registry
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

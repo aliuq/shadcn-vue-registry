@@ -1,0 +1,9 @@
+{
+  "name": "elements",
+  "image": "ghcr.io/aliuq/devcontainer:me",
+  "customizations": {
+    "vscode": {
+      "extensions": ["tamasfe.even-better-toml", "vue.volar", "bradlc.vscode-tailwindcss", "dbaeumer.vscode-eslint"]
+    }
+  }
+}

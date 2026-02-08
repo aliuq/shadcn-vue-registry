@@ -1,0 +1,11 @@
+[tasks.install-ai-agent-cli]
+description = "Install Agent Cli（opencode-ai、@github/copilot、@iflow-ai/iflow-cli@latest、@anthropic-ai/claude-code）"
+run = "bun add -g opencode-ai @github/copilot @iflow-ai/iflow-cli@latest @anthropic-ai/claude-code"
+
+[shell_alias]
+m = "mise"
+sk = "bunx skills"
+ska = "bunx skills add"
+skf = "bunx skills find"
+mr = "mise run"
+shadcn = "bunx shadcn-vue@latest"

@@ -1,0 +1,36 @@
+{
+  "name": "shadcn-vue-registry",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.24.0",
+  "engines": {
+    "node": ">=20.19.0",
+    "pnpm": ">=9.6.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:registry": "pnpm --filter registry dev",
+    "build:registry": "pnpm --filter registry build",
+    "build:registry:vercel": "pnpm --filter registry build:vercel",
+    "prepare": "pnpm simple-git-hooks",
+    "lint": "markdownlint . && eslint . && turbo run lint",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^6.4.2",
+    "bumpp": "^10.3.2",
+    "eslint": "^9.39.1",
+    "lint-staged": "^16.2.7",
+    "markdownlint-cli": "catalog:",
+    "simple-git-hooks": "^2.13.1",
+    "turbo": "^2.6.3",
+    "typescript": "catalog:"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}

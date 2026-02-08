@@ -1,0 +1,4 @@
+name = "registry"
+main = ".output/server/index.mjs"
+compatibility_date = "2025-02-08"
+# routes = [ "registry.example.com/*" ]

@@ -1,0 +1,25 @@
+{
+  "name": "@repo/elements",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A collection of Vue components for building user interfaces.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "test": "exit 0"
+  },
+  "dependencies": {
+    "@repo/shadcn-vue": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "lucide-vue-next": "catalog:",
+    "motion-v": "^1.7.4",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@vitejs/plugin-vue-jsx": "^5.1.2",
+    "typescript": "catalog:"
+  }
+}

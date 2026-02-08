@@ -1,0 +1,44 @@
+catalogMode: prefer
+cleanupUnusedCatalogs: true
+shellEmulator: true
+trustPolicy: no-downgrade
+
+trustPolicyExclude:
+  - chokidar@4.0.3
+  - langium@3.3.1
+
+packages:
+  - packages/*
+
+overrides:
+  semver: 7.7.3
+
+catalog:
+  '@antfu/eslint-config': ^7.3.0
+  '@tanstack/vue-table': 8.21.3
+  '@vee-validate/zod': 4.15.1
+  '@vueuse/core': 14.1.0
+  embla-carousel-vue: 8.6.0
+  lucide-vue-next: ^0.555.0
+  markdownlint-cli: ^0.47.0
+  reka-ui: 2.7.0
+  tailwindcss: ^4.1.17
+  typescript: ^5.9.3
+  vaul-vue: 0.4.1
+  vee-validate: 4.15.1
+  vue: ^3.5.25
+  vue-input-otp: 0.3.2
+  vue-sonner: 2.0.9
+
+allowedDeprecatedVersions:
+  '@types/parse-path': 7.1.0
+  glob: 7.2.3
+  inflight: 1.0.6
+  source-map-resolve: 0.6.0
+
+onlyBuiltDependencies:
+  - simple-git-hooks
+
+peerDependencyRules:
+  allowedVersions:
+    zod: '4'

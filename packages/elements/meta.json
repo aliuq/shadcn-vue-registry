@@ -1,0 +1,6 @@
+{
+  "targets": {
+    "pages/ChatPage.vue": "pages/chat/index.vue",
+    "files/eslint-config-mjs.mjs": "eslint.config.mjs"
+  }
+}

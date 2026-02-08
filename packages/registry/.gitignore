@@ -1,0 +1,12 @@
+node_modules
+dist
+.data
+.nitro
+.cache
+.output
+.vercel
+.env
+.env.local
+
+# Registry assets
+server/assets/registry

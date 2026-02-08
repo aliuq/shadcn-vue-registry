@@ -4,7 +4,7 @@ A **registry template for shadcn-vue** that packages your components, hooks, pag
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Start the local registry (dev mode, default port 3001)
 
@@ -40,7 +40,7 @@ npx shadcn-vue@latest add http://localhost:3001/hello-world.json
 
 ---
 
-## 🔍 Registry API (shadcn-vue compatible)
+## Registry API (shadcn-vue compatible)
 
 | Endpoint | Description |
 |----------|-------------|
@@ -57,7 +57,7 @@ These schemas define the structure and constraints for fields like `name`, `type
 
 ---
 
-## 📦 Create Your Own Registry Items
+## Create Your Own Registry Items
 
 Follow these steps to add or customize registry items in this template.
 
@@ -136,7 +136,7 @@ If no mapping is provided, collectors will attempt to infer a sensible target ba
 
 ---
 
-## 🚢 Build & Deploy
+## Build & Deploy
 
 ### Environment Variables
 
@@ -180,11 +180,13 @@ Configure these in your CI or hosting environment:
 
 ---
 
-## 📚 Reference
-
-### External Resources
+## Reference
 
 - **shadcn-vue Official Site**: <https://www.shadcn-vue.com>
 - **Registry Item Schema**: <https://shadcn-vue.com/schema/registry-item.json>
 - **Registry Index Schema**: <https://shadcn-vue.com/schema/registry.json>
 - **Project Architecture**: [packages/registry/ARCHITECTURE.md](packages/registry/ARCHITECTURE.md)
+
+---
+
+The project architecture is forked from [ai-elements-vue](https://github.com/vuepont/ai-elements-vue), with the core construction logic and documentation implemented by `Claude Opus 4.6`.

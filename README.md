@@ -62,7 +62,7 @@ These schemas define the structure and constraints for fields like `name`, `type
 Follow these steps to add or customize registry items in this template.
 
 ```bash
-npx degit https://github.com/aliuq/shadcn-vue-registry your-registry
+npx degit aliuq/shadcn-vue-registry your-registry
 cd your-registry
 pnpm install
 ```

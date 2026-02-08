@@ -3,20 +3,21 @@ import type { Registry, RegistryItem } from 'shadcn-vue/schema'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { defineEventHandler, getHeader, readBody, sendRedirect } from 'h3'
-import { useStorage } from 'nitropack/runtime'
+import { useRuntimeConfig, useStorage } from 'nitropack/runtime'
 import { z } from 'zod'
 import { REGISTRY_SEARCH_DIRS } from '../utils/config'
 
-const REGISTRY_STORAGE_BASE = 'assets:registry'
+const config = useRuntimeConfig()
 
+const REGISTRY_STORAGE_BASE = 'assets:registry'
 const REGISTRY_INDEX_FILE = 'registry.json'
 
 const SERVER_INFO = {
-  name: 'ai-elements-vue',
+  name: config.baseName,
   version: '1.0.0',
 }
 
-const DOCS_REDIRECT = 'https://www.ai-elements-vue.com/overview/mcp-server'
+const DOCS_REDIRECT = config.baseURL
 
 const getComponentInputSchema = z.object({
   component: z
@@ -107,19 +108,19 @@ function createMcpServer() {
   const server = new McpServer(SERVER_INFO)
 
   server.registerTool(
-    'get_ai_elements_components',
+    `get_${config.baseName}_components`,
     {
-      title: 'List AI Elements components',
-      description: 'Provides a list of all AI Elements components.',
+      title: `List ${config.baseName} components`,
+      description: `Provides a list of all ${config.baseName} components.`,
     },
     async () => handleListComponents(),
   )
 
   server.registerTool(
-    'get_ai_elements_component',
+    `get_${config.baseName}_component`,
     {
-      title: 'Get AI Elements component',
-      description: 'Provides information about an AI Elements component.',
+      title: `Get ${config.baseName} component`,
+      description: `Provides information about a ${config.baseName} component.`,
       inputSchema: getComponentInputSchema,
     },
     async ({ component }: GetComponentInput) => handleGetComponent(component),

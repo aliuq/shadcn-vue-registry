@@ -1,6 +1,6 @@
 import type { Registry, RegistryItem } from 'shadcn-vue/schema'
-import { eventHandler, getRequestURL } from 'h3'
-import { useStorage } from 'nitropack/runtime'
+import { defineHandler, getRequestURL } from 'nitro/h3'
+import { useStorage } from 'nitro/storage'
 import { config, REGISTRY_SEARCH_DIRS } from '../utils/config'
 
 interface RegistryErrorResponse {
@@ -37,7 +37,7 @@ function transformRegistryDependencies(item: RegistryItem, registryUrl: string):
   return item
 }
 
-export default eventHandler(async (event) => {
+export default defineHandler(async (event) => {
   const url = getRequestURL(event)
   const registryUrl = url.origin
   const storage = useStorage(`assets:registry`)

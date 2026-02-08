@@ -69,7 +69,7 @@ export async function generateRegistryAssets(ctx: { rootDir: string }) {
   }
 
   // ── Prepare output directories ──────────────────────────────────
-  const outBase = join(rootDir, 'server', 'assets', 'registry')
+  const outBase = join(rootDir, 'assets', 'registry')
 
   // Clean existing output to remove stale files from previous builds
   try {

@@ -1,4 +1,4 @@
-import type { Nitro } from 'nitropack'
+import type { Nitro } from 'nitro/types'
 import { generateRegistryAssets } from '../utils/registryBuilder'
 
 export const buildHooks = {

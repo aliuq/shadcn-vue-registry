@@ -9,4 +9,6 @@ dist
 .env.local
 
 # Registry assets
-server/assets/registry
+assets/registry
+
+.wrangler

@@ -12,8 +12,6 @@ const SERVER_INFO = {
   version: '1.0.0',
 }
 
-const DOCS_REDIRECT = '/all.json'
-
 const getComponentInputSchema = z.object({
   component: z
     .string()
@@ -146,7 +144,7 @@ export default defineHandler(async (event) => {
   if (node?.req.method === 'GET') {
     const accept = node.req.headers.accept ?? ''
     if (accept.includes('text/html')) {
-      return redirect(DOCS_REDIRECT)
+      return redirect('/all.json')
     }
   }
 

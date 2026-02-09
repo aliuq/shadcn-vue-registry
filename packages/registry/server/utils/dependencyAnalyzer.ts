@@ -1,5 +1,5 @@
 import { dirname, join } from 'node:path'
-import { Project } from 'ts-morph'
+import { Project, SyntaxKind } from 'ts-morph'
 import { config } from './config'
 
 // ─── Helpers ────────────────────────────────────────────────────────
@@ -11,10 +11,10 @@ export function unique<T>(arr: T[]): T[] {
 // Normalize to package root (supports scoped and deep subpath imports)
 export function getBasePackageName(specifier: string): string {
   if (specifier.startsWith('@')) {
-    const parts = specifier.split('/')
-    return parts.slice(0, 2).join('/')
+    const [scope, name] = specifier.split('/')
+    return `${scope}/${name}`
   }
-  return specifier.split('/')[0]
+  return specifier.split('/')[0]!
 }
 
 export function extractRegistrySlug(modulePath: string, basePath: string): string {
@@ -47,15 +47,28 @@ export function parseImportsFromCode(code: string): string[] {
     })
 
     const sourceFile = project.createSourceFile('temp.ts', code)
-    const imports: string[] = []
-    sourceFile.getImportDeclarations().forEach((declaration) => {
-      const moduleSpecifier = declaration.getModuleSpecifierValue()
-      if (moduleSpecifier) {
-        imports.push(moduleSpecifier)
-      }
-    })
 
-    return unique(imports)
+    /**
+     * Static imports like:
+     *
+     * 1. `import something from 'some-package'`
+     * 2. `import 'some-package/app.css'`
+     */
+    const imports = sourceFile.getImportDeclarations().map(i => i.getModuleSpecifierValue())
+
+    /**
+     * Dynamic imports like:
+     *
+     * 1. `await import('some-package')`
+     * 2. `import 'some-package/app.css'`
+     */
+    const dynamicImports = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression)
+      .filter(c => c.getExpression().getText() === 'import')
+      .map(c => c.getArguments()[0]?.getText())
+      .filter(Boolean)
+      .map(s => s!.slice(1, -1)) // Remove quotes
+
+    return unique([...imports, ...dynamicImports])
   }
   catch (error) {
     console.error('Failed to parse imports with ts-morph:', error)
@@ -214,7 +227,7 @@ export function analyzeDependencies(
     }
 
     // @/ alias imports — check for registry dependencies
-    if (mod.startsWith('@/')) {
+    if (mod.startsWith('@/') || mod.startsWith('~/')) {
       resolveRegistryDep(mod, registryDependencies, options)
       continue
     }

@@ -59,5 +59,15 @@
     "pnpm-workspace.yaml",
     ".devcontainer/devcontainer.json",
     "package.json"
-  ]
+  ],
+
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.experimental.configFile": {
+    "packages/elements/tailwind.css": "packages/elements/src/**"
+  }
 }

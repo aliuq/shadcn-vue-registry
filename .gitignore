@@ -34,3 +34,6 @@ coverage
 .code-group.md
 
 .pnpm-store
+
+# Ignore all skills
+.*/skills

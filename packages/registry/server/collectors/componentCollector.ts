@@ -14,7 +14,7 @@ import { BaseCollector, toTitle, validateRegistryItem } from './baseCollector'
  * Each group becomes a separate registry item of type `registry:component`.
  */
 export class ComponentCollector extends BaseCollector {
-  readonly typeConfig: RegistryTypeConfig = REGISTRY_TYPE_CONFIGS.component
+  readonly typeConfig: RegistryTypeConfig = REGISTRY_TYPE_CONFIGS.component!
 
   async collect(ctx: CollectorContext): Promise<AssetFile[]> {
     const componentPaths = await walkComponentFiles(ctx.srcDir, ctx.srcDir)
@@ -43,7 +43,7 @@ export class ComponentCollector extends BaseCollector {
     const groupMap = new Map<string, AssetFile[]>()
     for (const f of files) {
       const rel = f.path.replace(`components/${config.baseName}/`, '')
-      const group = rel.split('/')[0]
+      const group = rel.split('/')[0]!
       if (!groupMap.has(group))
         groupMap.set(group, [])
       groupMap.get(group)!.push(f)

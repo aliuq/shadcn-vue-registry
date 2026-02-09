@@ -1,14 +1,11 @@
-import type { H3Event } from 'h3'
+import type { H3Event } from 'nitro/h3'
 import type { Registry, RegistryItem } from 'shadcn-vue/schema'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
-import { defineEventHandler, getHeader, readBody, sendRedirect } from 'h3'
-import { useStorage } from 'nitropack/runtime'
+import { defineHandler, readBody, redirect } from 'nitro/h3'
+import { useStorage } from 'nitro/storage'
 import { z } from 'zod'
 import { config, REGISTRY_SEARCH_DIRS } from '../utils/config'
-
-const REGISTRY_STORAGE_BASE = 'assets:registry'
-const REGISTRY_INDEX_FILE = 'registry.json'
 
 const SERVER_INFO = {
   name: config.baseName,
@@ -28,13 +25,13 @@ type GetComponentInput = z.infer<typeof getComponentInputSchema>
 
 // Data Access Layer
 function getRegistryStorage() {
-  return useStorage(REGISTRY_STORAGE_BASE)
+  return useStorage('assets:registry')
 }
 
 async function loadRegistryIndex(): Promise<Registry | null> {
   try {
     const storage = getRegistryStorage()
-    return await storage.getItem(REGISTRY_INDEX_FILE) as Registry
+    return await storage.getItem('registry.json') as Registry
   }
   catch (error) {
     console.error('Failed to read registry index', error)
@@ -128,7 +125,8 @@ function createMcpServer() {
 }
 
 async function readOptionalBody(event: H3Event) {
-  const method = event.node.req.method
+  const node = event.runtime?.node
+  const method = node?.req.method
   if (!method || method === 'GET' || method === 'HEAD') {
     return undefined
   }
@@ -142,11 +140,13 @@ async function readOptionalBody(event: H3Event) {
   }
 }
 
-export default defineEventHandler(async (event) => {
-  if (event.node.req.method === 'GET') {
-    const accept = getHeader(event, 'accept') ?? ''
+export default defineHandler(async (event) => {
+  const node = event.runtime?.node
+
+  if (node?.req.method === 'GET') {
+    const accept = node.req.headers.accept ?? ''
     if (accept.includes('text/html')) {
-      return sendRedirect(event, DOCS_REDIRECT)
+      return redirect(DOCS_REDIRECT)
     }
   }
 
@@ -155,7 +155,7 @@ export default defineEventHandler(async (event) => {
     sessionIdGenerator: undefined,
   })
 
-  event.node.res.once('close', () => {
+  node?.res?.once('close', () => {
     server.close().catch(error => console.error('Failed to close MCP server', error))
     if (typeof transport.close === 'function') {
       transport.close().catch(error => console.error('Failed to close MCP transport', error))
@@ -164,5 +164,6 @@ export default defineEventHandler(async (event) => {
 
   const body = await readOptionalBody(event)
   await server.connect(transport)
-  await transport.handleRequest(event.node.req, event.node.res, body)
+  // @ts-expect-error ignore
+  return await transport.handleRequest(node?.req, node?.res, body)
 })

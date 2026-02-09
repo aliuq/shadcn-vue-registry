@@ -2,6 +2,41 @@
 description = "Install Agent Cli（opencode-ai、@github/copilot、@iflow-ai/iflow-cli@latest、@anthropic-ai/claude-code）"
 run = "bun add -g opencode-ai @github/copilot @iflow-ai/iflow-cli@latest @anthropic-ai/claude-code"
 
+[tasks.install-skills]
+description = "Install Skills CLI（bunx skills）"
+depends = [ "install-ai-agent-cli" ]
+run = '''
+bunx skills add vercel-labs/skills --agent github-copilot opencode iflow-cli -y
+bunx skills add nextlevelbuilder/ui-ux-pro-max-skill --agent github-copilot opencode iflow-cli -y
+'''
+
+[tasks.install]
+description = "Install all dependencies"
+run = "pnpm install"
+
+[tasks.clean]
+description = "Clean all node_modules and pnpm store and nitro build cache"
+run = [
+  "rm -rf node_modules",
+  "rm -rf packages/*/node_modules",
+  "rm -rf .pnpm-store pnpm-lock.yaml",
+  "rm -rf .turbo",
+  "rm -rf packages/registry/.nitro packages/registry/server/assets/registry",
+]
+
+[tasks.reinstall]
+description = "Install all dependencies and clean all package node_modules"
+depends = [ "clean" ]
+depends_post = [ "install" ]
+
+[tasks.dev]
+description = "Run development server"
+run = "pnpm -F registry dev"
+sources = [
+  "packages/registry/server/**/*",
+  "packages/elements/src/**/*"
+]
+
 [shell_alias]
 m = "mise"
 sk = "bunx skills"
@@ -9,3 +44,7 @@ ska = "bunx skills add"
 skf = "bunx skills find"
 mr = "mise run"
 shadcn = "bunx shadcn-vue@latest"
+dev = "mise watch dev --restart"
+
+[tools]
+watchexec = "latest"

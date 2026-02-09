@@ -75,6 +75,7 @@ export default defineHandler(async (event) => {
   const stats = collectStats(registry)
   const registryName = registry.name || 'Registry'
   const registryAlias = `@${config.baseName}`
+  const description = config.registryDescription || `shadcn-vue compatible component registry`
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -187,8 +188,8 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
   <div class="header">
-    <h1>${registryName}</h1>
-    <p>shadcn-vue compatible component registry</p>
+    <h1>${registryName?.toUpperCase()}</h1>
+    <p>${description}</p>
     <div class="url">
       <span>${baseUrl}</span>
       <button onclick="copyText('${baseUrl}',this)" title="Copy URL">${ICON_COPY}</button>

@@ -17,6 +17,11 @@ export default defineNitroConfig({
     nodeCompat: true,
     deployConfig: true,
   },
+  vercel: {
+    functions: {
+      runtime: 'bun1.x',
+    },
+  },
   unenv: {
     alias: {
       // https://github.com/nitrojs/nitro/issues/3170
